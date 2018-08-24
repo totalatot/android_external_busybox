@@ -11,12 +11,13 @@ BIONIC_CFLAGS := \
 	$(if $(BIONIC_L),-DBIONIC_L) \
 	$(if $(BIONIC_N),-DBIONIC_N -D_GNU_SOURCE) \
 	$(if $(BIONIC_O),-DBIONIC_O) \
+	-Wno-unused-variable -Wno-error=sign-compare -Wno-unused-parameter
 
 # Make a static library for regex.
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := android/regex/bb_regex.c
 LOCAL_C_INCLUDES := $(BB_PATH)/android/regex
-LOCAL_CFLAGS := -Wno-sign-compare
+LOCAL_CFLAGS := -Wno-sign-compare -Wno-unused-variable -Wno-unused-parameter
 LOCAL_MODULE := libclearsilverregex
 include $(BUILD_STATIC_LIBRARY)
 
@@ -129,6 +130,7 @@ LOCAL_MODULE := busybox
 LOCAL_MODULE_TAGS := eng debug
 LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_MODULE_PATH := $(TARGET_OUT_OPTIONAL_EXECUTABLES)
+LOCAL_CLANG := false
 LOCAL_SHARED_LIBRARIES := libc libcutils libm
 LOCAL_STATIC_LIBRARIES := libclearsilverregex libuclibcrpc libselinux
 busybox_autoconf_full_h := $(local-generated-sources-dir)/include/autoconf.h
@@ -189,4 +191,5 @@ LOCAL_UNSTRIPPED_PATH := $(PRODUCT_OUT)/symbols/utilities
 LOCAL_CFLAGS := $(BUSYBOX_CFLAGS) -include $(busybox_autoconf_full_h)
 LOCAL_C_INCLUDES := $(dir $(busybox_autoconf_full_h)) $(BUSYBOX_C_INCLUDES)
 LOCAL_GENERATED_SOURCES := $(busybox_autoconf_full_h)
+LOCAL_CLANG := false
 include $(BUILD_EXECUTABLE)
